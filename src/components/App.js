@@ -19,7 +19,7 @@ import Letters from './Letters';
 	({auth, folders, threads}, {params}) => ({
 		auth,
 		folders,
-		threads: threads.current[params.folder|0] || []
+		threads: threads.current[params.folder|0]
 	}),
 	(dispatch) => ({
 		actions: bindActionCreators({fetchStatus}, dispatch),
@@ -31,6 +31,12 @@ import Letters from './Letters';
 	({email, folder}, actions) => email && actions.fetchStatus(folder)
 )
 export default class App extends Component {
+	constructor(...args) {
+		super(...args);
+		this.activeFolderId = null;
+		this.activeThreads = [];
+	}
+
 	handleGlobalClick(evt) {
 		if (!evt.defaultPrevented) {
 			let el = evt.target;
@@ -48,10 +54,21 @@ export default class App extends Component {
 	}
 
 	render() {
-		const {auth, folders, threads, params} = this.props;
-		const folderId = params.folder|0;
+		const {auth} = this.props;
 
 		if (auth.state) {
+			let {folders, threads, params} = this.props;
+			let folderId = params.folder|0;
+
+			if (threads == null) {
+				// Not loaded
+				folderId = this.activeFolderId == null ? folderId : this.activeFolderId;
+				threads = this.activeThreads;
+			} else {
+				this.activeFolderId = folderId;
+				this.activeThreads = threads;
+			}
+
 			const sidebar = <Folders models={folders} active={folderId}/>;
 			const main = <Letters models={threads}/>;
 
