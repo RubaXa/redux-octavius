@@ -74,7 +74,7 @@ export default class App extends Component {
 
 			return <div ref="clickable" onClick={(evt) => this.handleGlobalClick(evt)}>
 				<Headline/>
-				<PortalMenu />
+				<PortalMenu threads={threads}/>
 				<Layout
 					bordered
 					left={<Scrollable content={sidebar}/>}

@@ -1,8 +1,18 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
+import * as selectionActions from '../actions/selection';
 
 import Button from './Button';
 import Layout from './Layout';
 
+@connect(
+	({selection}) => ({selectedCount: Object.keys(selection).length}),
+	(dispatch) => ({
+		selectionActions: bindActionCreators(selectionActions, dispatch),
+	})
+)
 export default class ProtalMenu extends Component {
 	render() {
 		const {selectedCount, selectionActions, threads} = this.props;

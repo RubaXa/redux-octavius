@@ -1,12 +1,23 @@
 import classNames from 'classnames';
 import React, {Component} from 'react';
 
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
+import * as selectionActions from '../actions/selection';
+
 import LettersItem from './LettersItem';
 
+@connect(
+	(state) => state,
+	(dispatch) => ({
+		selectionActions: bindActionCreators(selectionActions, dispatch),
+	})
+)
 export default class Letters extends Component {
 	handleToggleSelect(evt, model) {
-		// todo
 		evt.preventDefault();
+		this.props.selectionActions.toggle(model.id);
 	}
 
 	render() {
@@ -25,7 +36,7 @@ export default class Letters extends Component {
 						return <LettersItem
 							key={model.id}
 							model={model}
-							selected={false}
+							selected={selection[model.id]}
 							onToggleSelect={(evt) => this.handleToggleSelect(evt, model)}
 						/>
 					})}</div>
