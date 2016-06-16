@@ -9,6 +9,6 @@ import AuthForm from './AuthForm';
 export default class App extends Component {
 	render() {
 		const {auth} = this.props;
-		return !auth.state ? <AuthForm/> : <h1>Привет!</h1>;
+		return !auth.state ? <AuthForm/> : <h1>Привет, {auth.email}!</h1>;
 	}
 }

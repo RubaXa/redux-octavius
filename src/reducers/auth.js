@@ -1,4 +1,5 @@
-import {LOGIN_REQUEST, LOGIN_FAIL, LOGIN_SUCCESS} from '../constants/auth';
+import {LOGIN_REQUEST, LOGIN_FAIL} from '../constants/auth';
+import {USER_FETCH_SUCCESS, USER_FETCH_FAIL} from '../constants/user';
 
 const initialState = {
 	state: false,
@@ -12,10 +13,12 @@ export default (state = initialState, action) => {
 		case LOGIN_REQUEST:
 			return {...state, busy: true};
 
-		case LOGIN_SUCCESS:
-			return {...state, state: true, busy: false};
+		case USER_FETCH_SUCCESS:
+			const email = `${action.result.login}@${action.result.domain}`;
+			return {...state, ...action.result, email, state: true, busy: false};
 
 		case LOGIN_FAIL:
+		case USER_FETCH_FAIL:
 			return {...state, error: true, busy: false};
 
 		default:
