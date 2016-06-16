@@ -32,7 +32,19 @@ import Letters from './Letters';
 )
 export default class App extends Component {
 	handleGlobalClick(evt) {
-		// todo
+		if (!evt.defaultPrevented) {
+			let el = evt.target;
+
+			while (el.parentNode && el !== this.refs.clickable) {
+				if (el.tagName === 'A') {
+					evt.preventDefault();
+					this.props.routerActions.push(el.pathname);
+					return;
+				}
+
+				el = el.parentNode;
+			}
+		}
 	}
 
 	render() {
@@ -43,7 +55,7 @@ export default class App extends Component {
 			const sidebar = <Folders models={folders} active={folderId}/>;
 			const main = <Letters models={threads}/>;
 
-			return <div onClick={(evt) => this.handleGlobalClick(evt)}>
+			return <div ref="clickable" onClick={(evt) => this.handleGlobalClick(evt)}>
 				<Headline/>
 				<PortalMenu />
 				<Layout
