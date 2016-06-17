@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, {Component} from 'react';
+import immutableComponent from '../decorators/immutableComponent';
 
 import Avatar from './Avatar';
 import Button from './Button';
@@ -26,6 +27,7 @@ function letterTime(time) {
 	}
 }
 
+@immutableComponent(['model', 'selected'])
 export default class LettersItem extends Component {
 	render() {
 		const {model, selected, onToggleSelect} = this.props;

@@ -4,6 +4,10 @@ import {Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import React from 'react';
 
+// DevPerf
+import ReactFeatureFlags from 'react/lib/ReactFeatureFlags';
+ReactFeatureFlags.logTopLevelRenders = true;
+
 import App from './components/App';
 import configure from './store';
 
