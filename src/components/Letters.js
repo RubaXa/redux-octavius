@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux';
 
 import * as selectionActions from '../actions/selection';
 
-import ReactList from 'react-list';
+import {AutoSizer, VirtualScroll} from 'react-virtualized';
 import LettersItem from './LettersItem';
 
 @connect(
@@ -16,13 +16,30 @@ import LettersItem from './LettersItem';
 	})
 )
 export default class Letters extends Component {
+	constructor(args) {
+		super(...args);
+		this._rowRenderer = this._rowRenderer.bind(this);
+	}
+
 	handleToggleSelect(evt, model) {
 		evt.preventDefault();
 		this.props.selectionActions.toggle(model.id);
 	}
 
+	_rowRenderer({index}) {
+		const model = this.props.models[index];
+		const key = model.id;
+
+		return <LettersItem
+			key={key}
+			model={model}
+			selected={this.props.selection[model.id]}
+			onToggleSelect={(evt) => this.handleToggleSelect(evt, model)}
+		/>
+	}
+
 	render() {
-		const {models, selection} = this.props;
+		const {models} = this.props;
 
 		const classes = classNames({
 			'dataset': true,
@@ -31,25 +48,22 @@ export default class Letters extends Component {
 		});
 
 		const fragment = (
-			<div className="dataset-letters">
-				<div className={classes}>
-					<ReactList
-						itemsRenderer={(items, ref) => <div ref={ref} className="dataset__items">{items}</div>}
-						itemRenderer={(idx, key) => {
-							const model = models[idx];
-
-							return <LettersItem
-								key={key}
-								model={model}
-								selected={selection[model.id]}
-								onToggleSelect={(evt) => this.handleToggleSelect(evt, model)}
-							/>
-						}}
-						length={models.length}
-						type="simple"
-					  />
-				</div>
-			</div>
+			<AutoSizer>
+				{({width}) => (
+					<div className="dataset-letters">
+						<div className={classes}>
+							<div className="dataset__items">
+								<VirtualScroll
+									width={width}
+									rowCount={models.length}
+									rowHeight={44}
+									rowRenderer={this._rowRenderer}
+								/>
+							</div>
+						</div>
+					</div>
+				)}
+			</AutoSizer>
 		);
 
 		return fragment;
