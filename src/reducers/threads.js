@@ -8,8 +8,19 @@ export default (state = initialState, action) => {
 	switch (action.type) {
 		case STATUS_FETCH_SUCCESS:
 			const {folder} = action.data;
-			const {threads} = action.result;
-			return {...state, current: {...state.current, [folder]: threads}};
+			let {threads} = action.result;
+
+			threads = threads
+				.concat(threads, threads, threads, threads, threads)
+				.sort(() => Math.random() - Math.random());
+
+			return {
+				...state,
+				current: {
+					...state.current,
+					[folder]: threads,
+				}
+			};
 
 		default:
 			return state;

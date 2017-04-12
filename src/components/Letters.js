@@ -46,7 +46,7 @@ export default class Letters extends Component {
 							/>
 						}}
 						length={models.length}
-						type="simple"
+						type="uniform"
 					  />
 				</div>
 			</div>
